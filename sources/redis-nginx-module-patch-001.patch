@@ -1,0 +1,25 @@
+diff -uprN a/ngx_http_redis_module.c b/ngx_http_redis_module.c
+--- a/ngx_http_redis_module.c	2017-07-02 21:42:18.000000000 +0900
++++ b/ngx_http_redis_module.c	2023-06-16 16:54:16.566889403 +0900
+@@ -604,7 +604,7 @@ found:
+             ngx_str_set(&h->key, "Content-Encoding");
+             ngx_str_set(&h->value, "gzip");
+             h->lowcase_key = (u_char*) "content-encoding";
+-#if (NGX_HTTP_GZIP)
++#if (NGX_HTTP_GZIP && nginx_version < 1023000)
+             u->headers_in.content_encoding = h;
+ #endif
+         }
+@@ -1070,9 +1070,9 @@ ngx_http_redis_upstream_add(ngx_http_req
+             continue;
+         }
+ #endif
+-        
++
+         return uscfp[i];
+     }
+ 
+     return NULL;
+-}
+\ No newline at end of file
++}

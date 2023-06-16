@@ -1,0 +1,26 @@
+version: '3'
+services:
+  rhel8:
+    build:
+      context: .docker/build
+      dockerfile: Dockerfile_rhel8
+    privileged: true
+    command:
+      - /sbin/init
+    volumes:
+      - "./.repos/8:/home/builder/rpmbuild/RPMS"
+      - "./.repos/8/SRPMS:/home/builder/rpmbuild/SRPMS"
+      - "./rpmbuild/build.bash:/home/builder/build.bash:ro"
+      - "./specs:/home/builder/specs:ro"
+      - "./sources:/home/builder/sources:ro"
+    env_file:
+      - "./.env"
+  test-rhel8:
+    build:
+      context: .docker/test
+      dockerfile: Dockerfile_rhel8
+    privileged: true
+    command:
+      - /sbin/init
+    volumes:
+      - "./.repos:/usr/local/repos"

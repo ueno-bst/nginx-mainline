@@ -1,0 +1,3 @@
+FROM almalinux:8
+
+COPY nginx-mainline.repo /etc/yum.repos.d/nginx-mainline.repo

@@ -1,0 +1,38 @@
+FROM almalinux:8
+
+COPY nginx.repo /etc/yum.repos.d/nginx.repo
+
+RUN dnf update -y \
+    && dnf install -y epel-release yum-utils \
+    && yum-config-manager --enable powertools \
+    && dnf install -y \
+        createrepo_c \
+        wget \
+        yum-utils \
+        perl-ExtUtils-Embed \
+        which \
+        rpmdevtools \
+        rpm-build \
+        patch \
+        sudo \
+        openssl-devel \
+        pcre2-devel \
+        zlib-devel \
+        gcc gcc-c++ make \
+        libxslt-devel \
+        libedit-devel \
+        gd-devel \
+        nginx \
+    && dnf clean all
+
+RUN useradd -m -s /bin/bash builder \
+    && mkdir -p /home/builder/rpmbuild/{RPMS,SPECS,SOURCES,SRPMS} \
+    && chown builder. -R /home/builder/rpmbuild
+
+RUN { \
+  echo "builder ALL=(ALL) NOPASSWD:ALL"; \
+} >> /etc/sudoers.d/builder
+
+USER builder
+
+WORKDIR /home/builder

@@ -1,0 +1,5 @@
+[nginx-mainline]
+name=nginx mainline repo
+baseurl=file:///usr/local/repos/$releasever/$basearch/
+gpgcheck=0
+enabled=1
