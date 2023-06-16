@@ -1,0 +1,11 @@
+[nginx-mainline]
+name=nginx mainline repo
+baseurl=file:///usr/local/repos/$releasever/$basearch/
+gpgcheck=0
+enabled=1
+
+[nginx-mainline-source]
+name=nginx mainline repo - Source
+baseurl=file:///usr/local/repos/$releasever/SRPMS/
+gpgcheck=0
+enabled=0

@@ -8,8 +8,8 @@ services:
     command:
       - /sbin/init
     volumes:
-      - "./.repos/8:/home/builder/rpmbuild/RPMS"
-      - "./.repos/8/SRPMS:/home/builder/rpmbuild/SRPMS"
+      - "./docs/8:/home/builder/rpmbuild/RPMS"
+      - "./docs/8/SRPMS:/home/builder/rpmbuild/SRPMS"
       - "./rpmbuild/build.bash:/home/builder/build.bash:ro"
       - "./specs:/home/builder/specs:ro"
       - "./sources:/home/builder/sources:ro"
