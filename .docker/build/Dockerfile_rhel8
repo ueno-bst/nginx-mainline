@@ -16,6 +16,7 @@ RUN dnf update -y \
         patch \
         sudo \
         openssl-devel \
+        pcre-devel \
         pcre2-devel \
         zlib-devel \
         gcc gcc-c++ make \

@@ -16,6 +16,7 @@ Source103: https://github.com/openresty/lua-resty-lrucache/archive/v${LUA_RESTRY
 Source104: https://github.com/openresty/lua-cjson/archive/${LUA_CJSON_VERSION}.tar.gz#/lua-cjson-${LUA_CJSON_VERSION}.tar.gz
 Source105: https://github.com/openresty/lua-nginx-module/archive/v${NGX_LUA_VERSION}.tar.gz#/lua-nginx-module-${NGX_LUA_VERSION}.tar.gz
 Source106: https://github.com/openresty/stream-lua-nginx-module/archive/v${NGX_STREAM_LUA_VERSION}.tar.gz#/stream-lua-nginx-module-${NGX_LUA_VERSION}.tar.gz
+Source107: https://github.com/openresty/lua-resty-redis/archive/v${LUA_RESTRY_REDIS_VERSION}.tar.gz#/lua-resty-redis-${LUA_RESTRY_REDIS_VERSION}.tar.gz
 
 Patch10101: luajit2-2.1-00-makefile.patch
 Patch10102: luajit2-2.1-01-luaconf.patch
@@ -87,6 +88,11 @@ tar xvzfo %{SOURCE106} --strip 1
 %patch10601 -p1
 popd
 
+mkdir lua-resty-redis
+pushd lua-resty-redis
+tar xvzfo %{SOURCE107} --strip 1
+popd
+
 %build
 # build luajit
 cd %{bdir}
@@ -151,20 +157,25 @@ for f in `find %{bdir}/luajit2-${LUAJIT_VERSION}/usr/include/ngx-luajit-${LUAJIT
     %{__install} -m644 ${f} $RPM_BUILD_ROOT%{_includedir}/ngx-luajit-${LUAJIT_VERSION}/
 done
 
-%{__mkdir} -p $RPM_BUILD_ROOT/usr/lib/ngx-luajit-${LUAJIT_VERSION}
+%{__mkdir} -p $RPM_BUILD_ROOT/usr/local/lib/ngx-luajit-${LUAJIT_VERSION}
 for f in `find %{bdir}/luajit2-${LUAJIT_VERSION}/usr/lib/ngx-luajit-${LUAJIT_VERSION}/ -type f`; do
-    %{__install} -m644 ${f} $RPM_BUILD_ROOT/usr/lib/ngx-luajit-${LUAJIT_VERSION}/
+    %{__install} -m644 ${f} $RPM_BUILD_ROOT/usr/local/lib/ngx-luajit-${LUAJIT_VERSION}/
 done
 
 # Install lua-resty / lua-resty-lrucache
 %{__mkdir} -p $RPM_BUILD_ROOT%{_includedir}/ngx-luajit-${LUAJIT_VERSION}/resty
+
 cd %{bdir}/lua-resty-core \
     && LUA_LIB_DIR=$RPM_BUILD_ROOT%{_datadir}/ngx-luajit-${LUAJIT_VERSION} make install
+
 cd %{bdir}/lua-resty-lrucache \
     && LUA_LIB_DIR=$RPM_BUILD_ROOT%{_datadir}/ngx-luajit-${LUAJIT_VERSION} make install
 
-%clean
-%{__rm} -rf %{_buildrootdir}
+cd %{bdir}/lua-resty-redis \
+    && LUA_LIB_DIR=$RPM_BUILD_ROOT%{_datadir}/ngx-luajit-${LUAJIT_VERSION} make install
+
+#%clean
+#%{__rm} -rf %{_buildrootdir}
 
 %files
 %defattr(-,root,root)
@@ -180,5 +191,5 @@ cd %{bdir}/lua-resty-lrucache \
 %{_datadir}/ngx-luajit-${LUAJIT_VERSION}/resty/*
 %dir %{_includedir}/ngx-luajit-${LUAJIT_VERSION}
 %{_includedir}/ngx-luajit-${LUAJIT_VERSION}/*
-%dir /usr/lib/ngx-luajit-${LUAJIT_VERSION}
-/usr/lib/ngx-luajit-${LUAJIT_VERSION}/*
+%dir /usr/local/lib/ngx-luajit-${LUAJIT_VERSION}
+/usr/local/lib/ngx-luajit-${LUAJIT_VERSION}/*
