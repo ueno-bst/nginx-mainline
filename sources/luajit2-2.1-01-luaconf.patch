@@ -1,0 +1,24 @@
+diff -Naur a/src/luaconf.h b/src/luaconf.h
+--- a/src/luaconf.h	2022-09-15 11:17:58.000000000 +0900
++++ b/src/luaconf.h	2023-01-27 13:40:08.399978932 +0900
+@@ -37,7 +37,7 @@
+ #endif
+ #define LUA_LROOT	"/usr/local"
+ #define LUA_LUADIR	"/lua/5.1/"
+-#define LUA_LJDIR	"/luajit-2.1.0-beta3/"
++#define LUA_LJDIR	"/ngx-luajit-2.1/"
+ 
+ #ifdef LUA_ROOT
+ #define LUA_JROOT	LUA_ROOT
+@@ -57,9 +57,10 @@
+ #define LUA_LLPATH	";" LUA_LLDIR "?.lua;" LUA_LLDIR "?/init.lua"
+ #define LUA_LCPATH1	";" LUA_LCDIR "?.so"
+ #define LUA_LCPATH2	";" LUA_LCDIR "loadall.so"
++#define LUA_LCPATH3 ";" LUA_LROOT "/" LUA_LMULTILIB LUA_LJDIR "?.so"
+ 
+ #define LUA_PATH_DEFAULT	"./?.lua" LUA_JPATH LUA_LLPATH LUA_RLPATH
+-#define LUA_CPATH_DEFAULT	"./?.so" LUA_LCPATH1 LUA_RCPATH LUA_LCPATH2
++#define LUA_CPATH_DEFAULT	"./?.so" LUA_LCPATH3 LUA_LCPATH1 LUA_RCPATH LUA_LCPATH2
+ #endif
+ 
+ /* Environment variable names for path overrides and initialization code. */

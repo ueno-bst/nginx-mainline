@@ -46,7 +46,9 @@ popd
 %build
 cd %{bdir}
 
-./configure %{NGINX_CONFIG_ARGS} \
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT}" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
   --add-dynamic-module=ndk \
   --add-dynamic-module=set-misc \
 	--with-debug
@@ -56,7 +58,9 @@ for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
   mv $so $debugso
 done
 
-./configure %{NGINX_CONFIG_ARGS} \
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT}" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
   --add-dynamic-module=ndk \
   --add-dynamic-module=set-misc
 make %{?_smp_mflags} modules
