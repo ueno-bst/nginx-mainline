@@ -21,7 +21,7 @@ Provides: %{name}-r%{base_version}
 
 
 %description
-nginx development kit dynamic modules.
+nginx set-misc dynamic modules.
 
 %if 0%{?suse_version}
 %debug_package
