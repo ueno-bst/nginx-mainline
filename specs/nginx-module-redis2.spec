@@ -39,7 +39,10 @@ popd
 %build
 cd %{bdir}
 
-./configure %{NGINX_CONFIG_ARGS} --add-dynamic-module=redis2 \
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT}" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
+  --add-dynamic-module=redis2 \
 	--with-debug
 make %{?_smp_mflags} modules
 for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
@@ -47,7 +50,10 @@ for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
   mv $so $debugso
 done
 
-./configure %{NGINX_CONFIG_ARGS} --add-dynamic-module=redis2
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT}" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
+  --add-dynamic-module=redis2
 make %{?_smp_mflags} modules
 
 $install

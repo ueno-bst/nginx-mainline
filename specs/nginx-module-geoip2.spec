@@ -8,6 +8,7 @@ URL: https://nginx.org/
 Group: %{_group}
 
 BuildRequires: libmaxminddb-devel
+Requires: libmaxminddb
 
 Source0: https://nginx.org/download/nginx-%{base_version}.tar.gz#/nginx-%{base_version}.tar.gz
 
@@ -41,7 +42,10 @@ popd
 %build
 cd %{bdir}
 
-./configure %{NGINX_CONFIG_ARGS} --add-dynamic-module=geoip2 \
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT}" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
+  --add-dynamic-module=geoip2 \
 	--with-debug
 make %{?_smp_mflags} modules
 for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
@@ -49,7 +53,10 @@ for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
   mv $so $debugso
 done
 
-./configure %{NGINX_CONFIG_ARGS} --add-dynamic-module=geoip2
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT}" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
+  --add-dynamic-module=geoip2
 make %{?_smp_mflags} modules
 
 $install

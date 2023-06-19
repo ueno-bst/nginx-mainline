@@ -2,12 +2,8 @@ cd ${HOME}
 
 sudo chown builder. -R ${HOME}/rpmbuild/RPMS
 sudo chown builder. -R ${HOME}/rpmbuild/SRPMS
-
-nginx -V 2> ${HOME}/nginx.verbose
-grep -Eo "configure arguments:(.+)" ${HOME}/nginx.verbose | cut -b22- > nginx.config
-export NGINX_CONFIG=$(cat ${HOME}/nginx.config)
-
-arch=$(rpm --eval %{_arch})
+sudo chown builder. -R ${HOME}/rpmbuild/SOURCES
+sudo chown builder. -R ${HOME}/rpmbuild/SPECS
 
 # SOURCES ファイルの移動
 for dir in `find ${HOME}/sources/ -type f`; do
@@ -24,6 +20,8 @@ for dir in `find ${HOME}/specs/ -type f -name "*.spec"`; do
       cat ${HOME}/specs/nginx.spec-in $dir | envsubst "$(export | sed -E "s/^.* ([A-Za-z_]+?)(=.*)?/\$\1/")" > ${HOME}/rpmbuild/SPECS/$file
   fi
 done
+
+exit 1
 
 ## --
 ## 公式パッケージのソースをインストール

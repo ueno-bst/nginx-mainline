@@ -16,6 +16,7 @@ License: 2-clause BSD-like license
 
 BuildRoot: %{_tmppath}/%{name}-%{base_version}-%{base_release}-root
 Requires: nginx-r%{base_version}
+Requires: nginx-module-ndk-r%{base_version}
 Provides: %{name}-r%{base_version}
 
 
@@ -34,18 +35,20 @@ ln -s . nginx%{?base_suffix}
 
 mkdir set-misc
 pushd set-misc
-  tar xvzfo %{SOURCE100} --strip 1
+tar xvzfo %{SOURCE100} --strip 1
 popd
 
 mkdir ndk
 pushd ndk
-  tar xvzfo %{SOURCE101} --strip 1
+tar xvzfo %{SOURCE101} --strip 1
 popd
 
 %build
 cd %{bdir}
 
-./configure %{NGINX_CONFIG_ARGS} --add-dynamic-module=ndk --add-dynamic-module=set-misc \
+./configure %{NGINX_CONFIG_ARGS} \
+  --add-dynamic-module=ndk \
+  --add-dynamic-module=set-misc \
 	--with-debug
 make %{?_smp_mflags} modules
 for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
@@ -53,7 +56,9 @@ for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
   mv $so $debugso
 done
 
-./configure %{NGINX_CONFIG_ARGS} --add-dynamic-module=ndk --add-dynamic-module=set-misc
+./configure %{NGINX_CONFIG_ARGS} \
+  --add-dynamic-module=ndk \
+  --add-dynamic-module=set-misc
 make %{?_smp_mflags} modules
 
 $install

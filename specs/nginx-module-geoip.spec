@@ -8,6 +8,7 @@ URL: https://nginx.org/
 Group: %{_group}
 
 BuildRequires: GeoIP-devel
+Requires: GeoIP
 
 Source0: https://nginx.org/download/nginx-%{base_version}.tar.gz#/nginx-%{base_version}.tar.gz
 
@@ -34,7 +35,11 @@ ln -s . nginx%{?base_suffix}
 %build
 cd %{bdir}
 
-./configure %{NGINX_CONFIG_ARGS} --with-http_geoip_module=dynamic --with-stream_geoip_module=dynamic \
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT}" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
+  --with-http_geoip_module=dynamic \
+  --with-stream_geoip_module=dynamic \
 	--with-debug
 make %{?_smp_mflags} modules
 for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
@@ -42,7 +47,11 @@ for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
   mv $so $debugso
 done
 
-./configure %{NGINX_CONFIG_ARGS} --with-http_geoip_module=dynamic --with-stream_geoip_module=dynamic
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT}" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
+  --with-http_geoip_module=dynamic \
+  --with-stream_geoip_module=dynamic
 make %{?_smp_mflags} modules
 
 $install

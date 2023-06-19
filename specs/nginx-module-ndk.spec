@@ -33,13 +33,17 @@ ln -s . nginx%{?base_suffix}
 
 mkdir ndk
 pushd ndk
-  tar xvzfo %{SOURCE100} --strip 1
+tar xvzfo %{SOURCE100} --strip 1
 popd
 
 %build
 cd %{bdir}
 
-./configure %{NGINX_CONFIG_ARGS} --add-dynamic-module=ndk \
+./configure
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT} -DNDK_SET_VAR -DNDK_UPSTREAM_LIST" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
+  --add-dynamic-module=ndk \
 	--with-debug
 make %{?_smp_mflags} modules
 for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
@@ -47,7 +51,10 @@ for so in `find %{bdir}/objs/ -type f -name "*.so"`; do
   mv $so $debugso
 done
 
-./configure %{NGINX_CONFIG_ARGS} --add-dynamic-module=ndk
+./configure %{BASE_CONFIGURE_ARGS} \
+  --with-cc-opt="%{WITH_CC_OPT} -DNDK_SET_VAR -DNDK_UPSTREAM_LIST" \
+  --with-ld-opt="%{WITH_LD_OPT}" \
+  --add-dynamic-module=ndk
 make %{?_smp_mflags} modules
 
 $install
