@@ -26,3 +26,12 @@ services:
       - /sbin/init
     volumes:
       - "./docs:/usr/local/repos"
+  jekyll:
+    build:
+      context: .docker/jekyll
+      dockerfile: Dockerfile
+    volumes:
+      - "./docs:/usr/src/app"
+    command: jekyll serve -s /usr/src/app --watch --verbose --trace
+    ports:
+      - "${FORWARD_HOST:-0.0.0.0}:4000:4000"
