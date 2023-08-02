@@ -21,8 +21,6 @@ for dir in `find ${HOME}/specs/ -type f -name "*.spec"`; do
   fi
 done
 
-exit 1
-
 ## --
 ## 公式パッケージのソースをインストール
 ## --
@@ -49,13 +47,13 @@ for spec in `find ${HOME}/rpmbuild/SPECS/ -type f -name "*.spec"`; do
   rpmbuild -ba --clean $spec
 done
 
-if [ -f "${HOME}/rpmbuild/SRPMS/repodata/repomd.xml"]; then
+if [ -f "${HOME}/rpmbuild/SRPMS/repodata/repomd.xml" ]; then
   createrepo --update "${HOME}/rpmbuild/SRPMS"
 else
   createrepo "${HOME}/rpmbuild/SRPMS"
 fi
 
-if [ -f "${HOME}/rpmbuild/RPMS/repodata/$(rpm --eval %{_arch})/repomd.xml"]; then
+if [ -f "${HOME}/rpmbuild/RPMS/repodata/$(rpm --eval %{_arch})/repomd.xml" ]; then
   createrepo --update "${HOME}/rpmbuild/RPMS/$(rpm --eval %{_arch})"
 else
   createrepo "${HOME}/rpmbuild/RPMS/$(rpm --eval %{_arch})"

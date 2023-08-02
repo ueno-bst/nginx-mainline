@@ -17,6 +17,22 @@ services:
       - "./sources:/home/builder/sources:ro"
     env_file:
       - "./.env"
+  rhel9:
+    build:
+      context: .docker/build
+      dockerfile: Dockerfile_rhel9
+    privileged: true
+    command: "/bin/bash /home/builder/build.bash"
+    volumes:
+      - "./rpmbuild/SPECS:/home/builder/rpmbuild/SPECS"
+      - "./rpmbuild/SOURCES:/home/builder/rpmbuild/SOURCES"
+      - "./docs/9:/home/builder/rpmbuild/RPMS"
+      - "./docs/9/SRPMS:/home/builder/rpmbuild/SRPMS"
+      - "./rpmbuild/build.bash:/home/builder/build.bash:ro"
+      - "./specs:/home/builder/specs:ro"
+      - "./sources:/home/builder/sources:ro"
+    env_file:
+      - "./.env"
   test-rhel8:
     build:
       context: .docker/test
