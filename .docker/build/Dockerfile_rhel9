@@ -3,8 +3,9 @@ FROM almalinux:9
 COPY nginx.repo /etc/yum.repos.d/nginx.repo
 
 RUN dnf update -y \
-    && dnf install -y epel-release yum-utils \
+    && dnf install -y epel-release yum-utils https://rpms.remirepo.net/enterprise/remi-release-9.rpm \
     && yum-config-manager --enable crb \
+    && yum-config-manager --enable remi-safe \
     && dnf install -y \
         createrepo_c \
         wget \
@@ -23,6 +24,7 @@ RUN dnf update -y \
         libxslt-devel \
         libedit-devel \
         gd-devel \
+        GeoIP-devel \
         nginx \
     && dnf clean all
 
