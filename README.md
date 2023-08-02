@@ -47,7 +47,7 @@ exclude=nginx* # 追加
 DNFコマンドを使用してパッケージをインストールして下さい
 
 ```bash
-dnf install -y
+dnf install -y \
       nginx \
       nginx-module-brotli \
       nginx-module-cache-purge \
